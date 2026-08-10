@@ -1,0 +1,12 @@
+import "dotenv/config";
+console.log("A: before import prisma client");
+import { PrismaClient } from "@prisma/client";
+console.log("B: prisma client imported");
+const prisma = new PrismaClient();
+console.log("C: client constructed, connecting...");
+await prisma.$connect();
+console.log("D: connected!");
+const users = await prisma.user.findMany();
+console.log("E: query ok, users=", users.length);
+await prisma.$disconnect();
+console.log("F: disconnected, done");

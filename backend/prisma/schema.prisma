@@ -1,0 +1,241 @@
+// J27 Portfolio CMS — Prisma schema (PostgreSQL / Neon)
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "windows"]
+  output        = "../src/generated/prisma-client"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  ADMIN
+}
+
+enum CtaType {
+  SUBSCRIBE
+  CONTACT
+  EXTERNAL_LINK
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  projects       Project[]
+  photos         Photo[]
+  blogPosts      BlogPost[]
+  pricingPlans   PricingPlan[]
+}
+
+// Singleton row (id = "profile") holding personal/brand info shown across the site
+model Profile {
+  id             String   @id @default("profile")
+  brand          String   @default("J27")
+  fullName       String   @default("")
+  role           String   @default("")
+  tagline        String   @default("")
+  valueProposition String @default("")
+  summary        String   @default("")
+  availability   String   @default("")
+  location       String   @default("")
+  email          String   @default("")
+  phone          String   @default("")
+  avatarUrl      String   @default("")
+  avatarPublicId String   @default("")
+  aboutIntro     String   @default("")
+  aboutJourney   String   @default("")
+  aboutFocus     String   @default("")
+  aboutMindset   String   @default("")
+  aboutGoals     String   @default("")
+  skillBadges    String[] @default([])
+  strengths      String[] @default([])
+  socialLinks    Json     @default("[]")
+  updatedAt      DateTime @updatedAt
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  icon        String   @default("")
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  image       String   @default("")
+  imagePublicId String @default("")
+  techStack   String[] @default([])
+  features    String[] @default([])
+  githubLink  String   @default("")
+  liveLink    String   @default("")
+  featured    Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  createdBy   User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdById String?
+}
+
+model Skill {
+  id        String   @id @default(cuid())
+  name      String
+  category  String
+  level     Int      @default(50)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Education {
+  id          String   @id @default(cuid())
+  degree      String
+  institution String
+  duration    String
+  description String   @default("")
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Experience {
+  id           String   @id @default(cuid())
+  title        String
+  company      String
+  duration     String
+  description  String
+  achievements String[] @default([])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Certification {
+  id             String   @id @default(cuid())
+  title          String
+  issuer         String
+  completionDate DateTime
+  previewFile    String   @default("")
+  previewPublicId String  @default("")
+  credentialLink String   @default("")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  role      String
+  message   String
+  rating    Int      @default(5)
+  avatar    String   @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Photo {
+  id            String   @id @default(cuid())
+  title         String
+  description   String   @default("")
+  image         String
+  imagePublicId String   @default("")
+  alt           String   @default("")
+  featured      Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  createdBy     User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdById   String?
+}
+
+model BlogPost {
+  id           String    @id @default(cuid())
+  title        String
+  slug         String    @unique
+  excerpt      String    @default("")
+  content      String
+  coverImage   String    @default("")
+  coverPublicId String   @default("")
+  tags         String[]  @default([])
+  published    Boolean   @default(false)
+  publishedAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  author       User?     @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  authorId     String?
+}
+
+model PricingPlan {
+  id          String   @id @default(cuid())
+  name        String
+  price       String
+  billingPeriod String @default("one-time")
+  description String   @default("")
+  image       String   @default("")
+  imagePublicId String @default("")
+  features    String[] @default([])
+  highlighted Boolean  @default(false)
+  ctaLabel    String   @default("Subscribe")
+  ctaType     CtaType  @default(SUBSCRIBE)
+  ctaUrl      String   @default("")
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  createdBy   User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdById String?
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String   @default("")
+  message   String
+  rating    Int?
+  source    String   @default("contact") // "contact" | "pricing:<planId>"
+  createdAt DateTime @default(now())
+}
+
+model SiteAsset {
+  key           String   @id // "resume" | "logo"
+  url           String
+  publicId      String   @default("")
+  originalName  String   @default("")
+  mimeType      String   @default("")
+  size          Int      @default(0)
+  uploadedAt    DateTime @default(now())
+}
+
+model ThemeSettings {
+  id            String   @id @default("theme")
+  primaryColor  String   @default("#6d28d9")
+  accentColor   String   @default("#f472b6")
+  backgroundColor String @default("#05050a")
+  fontHeading   String   @default("Space Grotesk")
+  fontBody      String   @default("Inter")
+  radius        String   @default("1rem")
+  updatedAt     DateTime @updatedAt
+}
+
+model SectionConfig {
+  key       String   @id // "hero" | "about" | "services" | "projects" | "skills" | "certifications" | "gallery" | "blog" | "pricing" | "contact"
+  label     String
+  enabled   Boolean  @default(true)
+  order     Int      @default(0)
+  updatedAt DateTime @updatedAt
+}

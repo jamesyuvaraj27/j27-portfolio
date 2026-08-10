@@ -1,0 +1,26 @@
+# environment
+.env
+backend/.env
+frontend/.env
+
+# dependencies
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+# build output
+dist/
+frontend/dist/
+build/
+
+# prisma
+backend/prisma/dev.db
+backend/src/generated/
+
+# logs
+*.log
+npm-debug.log*
+
+# system files
+.DS_Store
+Thumbs.db
