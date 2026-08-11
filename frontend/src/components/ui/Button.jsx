@@ -16,7 +16,7 @@ const SIZES = {
 const Button = ({ as: Component = "button", variant = "primary", size = "md", className, children, ...props }) => (
   <Component
     className={cn(
-      "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed",
+      "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all duration-200 hover:scale-[1.04] active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100",
       VARIANTS[variant],
       SIZES[size],
       className

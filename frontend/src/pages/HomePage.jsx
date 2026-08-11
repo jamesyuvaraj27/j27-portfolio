@@ -2,6 +2,7 @@ import Navbar from "../components/Navbar";
 import Seo from "../components/Seo";
 import { NAV_ITEMS, FALLBACK_PROFILE } from "../lib/site";
 import { isSectionEnabled, useContent } from "../lib/useContent";
+import { useLenis } from "../lib/useLenis";
 import {
   AboutSection,
   BlogSection,
@@ -29,6 +30,7 @@ const SECTION_COMPONENTS = {
 };
 
 const HomePage = () => {
+  useLenis();
   const { data, loading } = useContent();
 
   const profile = data?.profile || FALLBACK_PROFILE;
