@@ -13,7 +13,7 @@ const ICONS = { github: Github, linkedin: Linkedin, mail: Mail, instagram: Insta
 
 const DEFAULT_STATS = [
   { label: "Projects Shipped", value: 5, suffix: "+" },
-  { label: "CGPA", value: 9, suffix: ".09" },
+  { label: "CGPA", value: 8, suffix: ".43" },
   { label: "Tech Stack", value: 15, suffix: "+" },
 ];
 
