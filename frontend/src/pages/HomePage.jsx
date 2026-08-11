@@ -61,7 +61,7 @@ const HomePage = () => {
 
           const props = {
             hero: { profile },
-            about: { profile },
+            about: { profile, education: data?.education, experience: data?.experience },
             services: { services: data?.services },
             projects: { projects: data?.projects, filters: data?.filters },
             skills: { skills: data?.skills },

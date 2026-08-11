@@ -28,7 +28,7 @@ export const getPortfolioContent = async (req, res, next) => {
       prisma.project.findMany({ orderBy: [{ featured: "desc" }, { order: "asc" }] }),
       prisma.skill.findMany({ orderBy: [{ category: "asc" }, { level: "desc" }] }),
       prisma.education.findMany({ orderBy: { order: "asc" } }),
-      prisma.experience.findMany({ orderBy: { createdAt: "desc" } }),
+      prisma.experience.findMany({ orderBy: { order: "asc" } }),
       prisma.certification.findMany({ orderBy: { completionDate: "desc" } }),
       prisma.testimonial.findMany({ orderBy: { createdAt: "desc" } }),
       prisma.photo.findMany({ orderBy: [{ featured: "desc" }, { createdAt: "desc" }] }),

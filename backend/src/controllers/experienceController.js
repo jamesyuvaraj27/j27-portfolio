@@ -1,6 +1,6 @@
 import { prisma } from "../config/db.js";
 import { buildCrudController } from "../utils/crudFactory.js";
-import { badRequest, normalizeList, sanitizeString } from "../utils/validation.js";
+import { badRequest, normalizeList, parseNumber, sanitizeString } from "../utils/validation.js";
 
 const buildPayload = (body) => {
   const title = sanitizeString(body.title);
@@ -18,10 +18,12 @@ const buildPayload = (body) => {
     duration,
     description,
     achievements: normalizeList(body.achievements),
+    order: parseNumber(body.order, { fallback: 0 }),
   };
 };
 
 export default buildCrudController({
   model: prisma.experience,
   buildPayload,
+  orderBy: { order: "asc" },
 });

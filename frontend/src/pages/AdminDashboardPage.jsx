@@ -140,6 +140,12 @@ const AdminDashboardPage = () => {
               { name: "duration", label: "Duration", type: "text", required: true },
               { name: "description", label: "Description", type: "textarea", required: true },
               { name: "achievements", label: "Achievements", type: "tags" },
+              {
+                name: "order",
+                label: "Order (lower = earlier in the Journey timeline)",
+                type: "number",
+                default: 0,
+              },
             ]}
           />
         );
